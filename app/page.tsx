@@ -1,4 +1,5 @@
 "use client";
+import { useKeenSlider } from "keen-slider/react";
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -35,6 +36,7 @@ import {
   SiAmazonec2,
   SiElasticsearch,
   SiGooglecloud,
+  SiApache,
 } from "react-icons/si";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -42,6 +44,7 @@ import profilePic from "@/public/IMG_20250528_112932.jpg";
 import kylientLogo from "@/public/logos/kylient.jpg";
 import variantLogo from "@/public/logos/variant.jpg";
 import infoceptsLogo from "@/public/logos/infocepts.jpg";
+import "keen-slider/keen-slider.min.css";
 
 const KylientLogo = () => (
   <div className="bg-white rounded-lg p-1 flex items-center justify-center w-12 h-12">
@@ -58,6 +61,8 @@ const InfoceptsLogo = () => (
     <Image src={infoceptsLogo} alt="Infocepts Logo" width={40} height={40} />
   </div>
 );
+
+const ROWS = 3;
 
 export default function Portfolio() {
   const [activeSection, setActiveSection] = useState("home");
@@ -164,50 +169,25 @@ export default function Portfolio() {
 
   const skills = [
     {
-      category: "Cloud Platforms",
       items: [
         { name: "AWS", icon: FaAws },
         { name: "Azure", icon: FaMicrosoft },
         { name: "Google Cloud", icon: SiGooglecloud },
-      ],
-    },
-    {
-      category: "Databases",
-      items: [
         { name: "MySQL", icon: SiMysql },
         { name: "PostgreSQL", icon: SiPostgresql },
         { name: "SQL Server", icon: FaDatabase },
-      ],
-    },
-    {
-      category: "Monitoring",
-      items: [
         { name: "Grafana", icon: SiGrafana },
         { name: "Prometheus", icon: SiPrometheus },
         { name: "ELK Stack", icon: SiElasticsearch },
-      ],
-    },
-    {
-      category: "Languages",
-      items: [
         { name: "Python", icon: FaPython },
         { name: "Java", icon: FaJava },
-        { name: "Shell", icon: SiShell },
-      ],
-    },
-    {
-      category: "DevOps Tools",
-      items: [
+        { name: "Shell Scipting", icon: SiShell },
         { name: "Docker", icon: FaDocker },
         { name: "Kubernetes", icon: SiKubernetes },
         { name: "Jenkins", icon: FaJenkins },
-      ],
-    },
-    {
-      category: "Infrastructure",
-      items: [
         { name: "Terraform", icon: SiTerraform },
         { name: "Ansible", icon: SiAnsible },
+        { name: "Apache", icon: SiApache },
         { name: "NGINX", icon: SiNginx },
       ],
     },
@@ -251,7 +231,7 @@ export default function Portfolio() {
   const certifications = [
     {
       title: "AWS Solutions Architect – Associate",
-      issuer: "Amazon Web Services",
+      issuer: "ExcelR",
       link: "https://portfolio-bucket-0010.s3.ap-south-1.amazonaws.com/Portfolio/AWS-Harshal+Santosh+Jadhav.pdf",
     },
     {
@@ -276,35 +256,120 @@ export default function Portfolio() {
     { id: "certifications", label: "Certifications" },
     { id: "contact", label: "Contact" },
   ];
+  const [sliderRefs, setSliderRefs] = useState<any[]>([]);
+
+  useEffect(() => {
+    setSliderRefs((sliderRefs) =>
+      Array(skills.length)
+        .fill(null)
+        .map((_, i) => sliderRefs[i] || null)
+    );
+  }, [skills.length]);
+
+  const skillRows = Array.from({ length: ROWS }, (_, rowIdx) =>
+    skills[0].items.filter((_, i) => i % ROWS === rowIdx)
+  );
+  function AutoplayPlugin(slider: any) {
+    let timeout: any;
+    let mouseOver = false;
+
+    function clearNextTimeout() {
+      clearTimeout(timeout);
+    }
+
+    function nextTimeout() {
+      clearTimeout(timeout);
+      if (mouseOver) return;
+      timeout = setTimeout(() => {
+        slider.next();
+      }, 2000);
+    }
+
+    slider.on("created", () => {
+      slider.container.addEventListener("mouseover", () => {
+        mouseOver = true;
+        clearNextTimeout();
+      });
+      slider.container.addEventListener("mouseout", () => {
+        mouseOver = false;
+        nextTimeout();
+      });
+      nextTimeout();
+    });
+    slider.on("dragStarted", clearNextTimeout);
+    slider.on("animationEnded", nextTimeout);
+    slider.on("updated", nextTimeout);
+  }
+  const [sliderRef0] = useKeenSlider(
+    {
+      loop: true,
+      slides: { perView: 5, spacing: 16 },
+    },
+    [AutoplayPlugin]
+  );
+  const [sliderRef1] = useKeenSlider(
+    {
+      loop: true,
+      slides: { perView: 5, spacing: 16 },
+    },
+    [AutoplayPlugin]
+  );
+  const [sliderRef2] = useKeenSlider(
+    {
+      loop: true,
+      slides: { perView: 5, spacing: 16 },
+    },
+    [AutoplayPlugin]
+  );
 
   return (
     <div className="bg-gradient-to-br from-[#0a0f1f] via-[#121c33] to-[#0a0f1f] text-gray-100 min-h-screen scroll-smooth">
-      {/* Floating Particles */}
-      <div className="fixed inset-0 overflow-hidden z-0">
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full bg-gradient-to-r from-cyan-500/10 to-blue-600/10"
-            style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              width: `${Math.random() * 10 + 2}rem`,
-              height: `${Math.random() * 10 + 2}rem`,
-            }}
-            animate={{
-              x: [0, Math.random() * 100 - 50],
-              y: [0, Math.random() * 100 - 50],
-              rotate: [0, 360],
-            }}
-            transition={{
-              duration: Math.random() * 20 + 15,
-              repeat: Infinity,
-              repeatType: "reverse",
-            }}
-          />
-        ))}
+      {/* Modern Animated Gradient Blobs Background */}
+      <div className="fixed inset-0 -z-10 pointer-events-none">
+        <motion.div
+          className="absolute top-[-10%] left-[-10%] w-[40vw] h-[40vw] bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-500 opacity-30 rounded-full blur-3xl"
+          animate={{
+            x: [0, 100, 0, -100, 0],
+            y: [0, 80, 0, -80, 0],
+            scale: [1, 1.2, 1, 0.8, 1],
+            rotate: [0, 60, 120, 180, 360],
+          }}
+          transition={{
+            duration: 18,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+        <motion.div
+          className="absolute bottom-[-15%] right-[-10%] w-[50vw] h-[50vw] bg-gradient-to-tr from-blue-400 via-cyan-500 to-purple-600 opacity-20 rounded-full blur-3xl"
+          animate={{
+            x: [0, -80, 0, 80, 0],
+            y: [0, -100, 0, 100, 0],
+            scale: [1, 0.9, 1.1, 1, 1],
+            rotate: [0, 90, 180, 270, 360],
+          }}
+          transition={{
+            duration: 22,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+        <motion.div
+          className="absolute top-1/2 left-1/2 w-[30vw] h-[30vw] bg-gradient-to-tl from-purple-400 via-cyan-400 to-blue-500 opacity-25 rounded-full blur-2xl"
+          style={{ translateX: "-50%", translateY: "-50%" }}
+          animate={{
+            x: [0, 60, -60, 0],
+            y: [0, -60, 60, 0],
+            scale: [1, 1.15, 0.85, 1],
+            rotate: [0, 180, 360, 0],
+          }}
+          transition={{
+            duration: 26,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
       </div>
-
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 backdrop-blur-md bg-[#0a0f1f]/80 border-b border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -358,11 +423,10 @@ export default function Portfolio() {
           </div>
         </div>
       </nav>
-
       {/* Hero Section */}
       <section
         id="home"
-        className="min-h-screen flex flex-col md:flex-row items-center justify-center gap-12 px-6 py-24 relative z-10"
+        className="min-h-screen flex flex-col-reverse md:flex-row items-center justify-center gap-12 px-6 py-24 relative z-10"
       >
         <motion.div
           className="md:w-1/2 flex flex-col gap-6"
@@ -383,9 +447,10 @@ export default function Portfolio() {
             </motion.h1>
           </motion.div>
 
-          <motion.p className="text-xl md:text-2xl text-gray-300 font-light max-w-xl">
-            Experienced in CI/CD, Jenkins, Docker, Kubernetes, and AWS. Skilled
-            in building scalable, secure, and efficient solutions.
+          <motion.p className="text-xl md:text-1xl text-gray-300 font-light max-w-xl">
+            B.Tech in Computer Science | Experienced in CI/CD, Jenkins, Docker,
+            Kubernetes, and AWS. Skilled in building scalable, secure, and
+            efficient solutions.
           </motion.p>
 
           <div className="mt-6 flex flex-wrap gap-4">
@@ -412,7 +477,6 @@ export default function Portfolio() {
           />
         </motion.div>
       </section>
-
       {/* About Section */}
       <section id="about" className="py-16 px-6 md:px-24 relative z-10">
         <motion.div
@@ -493,7 +557,6 @@ export default function Portfolio() {
           </div>
         </motion.div>
       </section>
-
       {/* Projects Section */}
       <section id="projects" className="py-16 px-6 md:px-24 relative z-10">
         <motion.div
@@ -561,9 +624,39 @@ export default function Portfolio() {
           </div>
         </motion.div>
       </section>
-
       {/* Skills Section */}
       <section id="skills" className="py-16 px-6 md:px-24 relative z-10">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={fadeInUp}
+        >
+          <div className="flex items-center gap-4 mb-8">
+            <div className="h-1 w-12 bg-cyan-400 rounded-full"></div>
+            <h2 className="text-3xl font-bold text-cyan-300">Skills</h2>
+          </div>
+          <div className="space-y-6">
+            {[sliderRef0, sliderRef1, sliderRef2].map((sliderRef, rowIdx) => (
+              <div key={rowIdx} ref={sliderRef} className="keen-slider">
+                {skillRows[rowIdx].map((skill, i) => (
+                  <div
+                    key={i}
+                    className="keen-slider__slide flex items-center gap-3 bg-gray-800/50 px-6 py-4 rounded-lg min-w-[180px] hover:bg-cyan-900/20 transition-all group"
+                  >
+                    <skill.icon className="text-cyan-400 text-2xl transition-transform group-hover:scale-110" />
+                    <span className="text-gray-300 group-hover:text-cyan-300 transition-colors text-lg">
+                      {skill.name}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      </section>
+
+      {/* <section id="skills" className="py-16 px-6 md:px-24 relative z-10">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -605,8 +698,7 @@ export default function Portfolio() {
             ))}
           </div>
         </motion.div>
-      </section>
-
+      </section> */}
       {/* Experience Section */}
       <section id="experience" className="py-16 px-6 md:px-24 relative z-10">
         <motion.div
@@ -706,7 +798,6 @@ export default function Portfolio() {
           </div>
         </motion.div>
       </section>
-
       {/* Education Section */}
       <section id="education" className="py-16 px-6 md:px-24 relative z-10">
         <motion.div
@@ -740,7 +831,6 @@ export default function Portfolio() {
           </div>
         </motion.div>
       </section>
-
       {/* Certifications Section */}
       <section
         id="certifications"
@@ -784,7 +874,6 @@ export default function Portfolio() {
           </div>
         </motion.div>
       </section>
-
       {/* Contact Section */}
       <section id="contact" className="py-16 px-6 md:px-24 relative z-10">
         <motion.div
@@ -804,7 +893,7 @@ export default function Portfolio() {
 
           <div className="flex flex-col sm:flex-row justify-center gap-6 max-w-2xl mx-auto">
             <a
-              href="https://portfolio-bucket-0010.s3.ap-south-1.amazonaws.com/Portfolio/Harshal+Jadhav+Resume.pdf"
+              href="https://portfolio-harshal.s3.ap-south-1.amazonaws.com/Harshal+Jadhav+Resume.pdf"
               download
               target="_blank"
               rel="noopener noreferrer"
@@ -827,7 +916,6 @@ export default function Portfolio() {
           </div>
         </motion.div>
       </section>
-
       {/* Footer */}
       <footer className="relative py-8 text-center text-sm text-gray-400 z-10">
         <div className="container mx-auto px-6">
