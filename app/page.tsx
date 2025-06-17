@@ -1,6 +1,5 @@
 "use client";
 import { useKeenSlider } from "keen-slider/react";
-
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -193,36 +192,69 @@ export default function Portfolio() {
     },
   ];
 
-  const projects = [
+  type ProjectTech =
+    | { logo: string }
+    | { icon: React.ComponentType<{ className?: string }>; name: string }
+    | string;
+
+  const projects: {
+    title: string;
+    description: string;
+    tech: ProjectTech[];
+    github: string;
+    demo: string;
+    isLive?: boolean;
+  }[] = [
     {
-      title: "E-commerce Microservices",
+      title: "CMI-Construction-CRM",
       description:
-        "Scalable platform with 20+ microservices using Spring Boot, Docker, and K8s.",
-      tech: ["Java", "Spring Boot", "Docker", "Kubernetes", "Jenkins"],
-      github:
-        "https://github.com/harshaljadhav-git/Ecommerce_Microservices_App",
-      demo: "#",
+        "A web-based CRM system tailored for the construction industry, enabling teams to manage leads, clients, estimates, inventory, vendors, teams, and documentation—all in one platform.",
+      tech: [
+        { logo: "/logos/aws.png" },
+        { logo: "/logos/mysql.png" },
+        { logo: "/logos/docker.png" },
+        { logo: "/logos/nginx.png" },
+        { logo: "/logos/jenkins.png" },
+      ],
+      github: "#",
+      demo: "https://testcmi-nest.kylient.com",
+      isLive: true,
     },
     {
       title: "Cloudfin Insights",
       description:
         "Serverless financial data pipeline using Lambda, RDS, Glue & QuickSight.",
-      tech: ["AWS", "Lambda", "Glue", "QuickSight"],
-      github: "https://github.com/harshaljadhav-git/cloudfin-insights",
+      tech: [
+        { logo: "/logos/quicksight.png" },
+        { logo: "/logos/glue.png" },
+        { logo: "/logos/lambda.png" },
+        { logo: "/logos/rds.jpeg" },
+        { logo: "/logos/s3.jpeg" },
+      ],
+      github: "https://github.com/harshaljadhav-git/Cloudfin_Insights",
       demo: "#",
     },
     {
       title: "Trykart Cloud Deployment",
       description:
         "Deployed Angular + Spring Boot app with AWS EC2, RDS, CloudFront & load balancing.",
-      tech: ["Angular", "Java", "Spring Boot", "AWS"],
+      tech: [
+        { logo: "/logos/aws.png" },
+        { logo: "/logos/angular.png" },
+        { logo: "/logos/java.png" },
+        { logo: "/logos/springboot.png" },
+      ],
       github: "https://github.com/harshaljadhav-git/Trykart-Cloud-Deployment",
       demo: "#",
     },
     {
-      title: "Malware Detection ML",
+      title: "Malware Detection using Machine Learning",
       description: "Web app to detect malware using Random Forest ML model.",
-      tech: ["Flask", "Python", "Machine Learning"],
+      tech: [
+        { logo: "/logos/flask.png" },
+        { logo: "/logos/python.jpeg" },
+        { logo: "/logos/machinelearning.png" },
+      ],
       github: "https://github.com/harshaljadhav-git/malware-detection-ml",
       demo: "#",
     },
@@ -577,11 +609,11 @@ export default function Portfolio() {
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-gradient-to-b from-gray-900/50 to-gray-800/30 backdrop-blur-lg rounded-2xl overflow-hidden border border-gray-800 shadow-lg hover:shadow-cyan-500/20 transition-all h-full flex flex-col"
+                className="bg-gradient-to-b from-gray-900/50 to-gray-800/30 backdrop-blur-lg rounded-2xl overflow-hidden border border-gray-800 shadow-lg hover:shadow-cyan-500/20 transition-all flex flex-col group h-full min-h-[420px]"
               >
                 <div className="p-6 flex-grow">
                   <div className="flex justify-between items-start mb-4">
-                    <h3 className="text-xl font-bold text-white">
+                    <h3 className="text-xl font-bold text-white group-hover:text-cyan-300 transition-colors">
                       {project.title}
                     </h3>
                     <div className="flex gap-2">
@@ -594,31 +626,74 @@ export default function Portfolio() {
                           <FaGithub className="text-gray-300 hover:text-cyan-300" />
                         </div>
                       </a>
-                      <a
-                        href={project.demo}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <div className="p-2 bg-gray-800/50 rounded-lg hover:bg-cyan-900/20 transition">
-                          <FaExternalLinkAlt className="text-gray-300 hover:text-cyan-300" />
-                        </div>
-                      </a>
+                      {project.isLive && (
+                        <a
+                          href={project.demo}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {/*
+                          <div className="p-2 bg-gray-800/50 rounded-lg hover:bg-cyan-900/20 transition">
+                            <FaExternalLinkAlt className="text-gray-300 hover:text-cyan-300" />
+                          </div>
+                          */}
+                        </a>
+                      )}
                     </div>
                   </div>
 
                   <p className="text-gray-300 mb-4">{project.description}</p>
 
-                  <div className="flex flex-wrap gap-2 mt-auto">
-                    {project.tech.map((tech, i) => (
-                      <span
-                        key={i}
-                        className="text-xs bg-cyan-900/30 text-cyan-300 px-2 py-1 rounded-md"
-                      >
-                        {tech}
-                      </span>
-                    ))}
+                  <div className="mt-6">
+                    <p className="text-sm text-cyan-400 mb-2">Tech Stack:</p>
+                    <div className="flex flex-wrap gap-3">
+                      {project.tech.map((tech, i) => (
+                        <div
+                          key={i}
+                          className="flex items-center gap-2 bg-gray-800/50 px-3 py-2 rounded-md group-hover:bg-cyan-900/20 transition-all"
+                        >
+                          {typeof tech === "object" &&
+                          tech !== null &&
+                          "logo" in tech ? (
+                            <div className="w-8 h-8 flex items-center justify-center">
+                              <Image
+                                src={tech.logo}
+                                alt={`${project.title} tech logo`}
+                                width={32}
+                                height={32}
+                                className="w-full h-full object-contain"
+                              />
+                            </div>
+                          ) : typeof tech === "object" &&
+                            tech !== null &&
+                            "icon" in tech ? (
+                            <div className="text-cyan-400">
+                              <tech.icon className="text-xl" />
+                            </div>
+                          ) : (
+                            <span className="text-xs text-cyan-400">
+                              {typeof tech === "string" ? tech : ""}
+                            </span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
+
+                {project.isLive && (
+                  <div className="bg-gradient-to-r from-cyan-700 to-blue-700 p-3 flex items-center justify-center">
+                    <a
+                      href={project.demo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-white hover:text-cyan-200 transition-colors"
+                    >
+                      <FaExternalLinkAlt className="text-lg" />
+                      <span className="font-medium">Live Demo</span>
+                    </a>
+                  </div>
+                )}
               </motion.div>
             ))}
           </div>
@@ -636,69 +711,19 @@ export default function Portfolio() {
             <div className="h-1 w-12 bg-cyan-400 rounded-full"></div>
             <h2 className="text-3xl font-bold text-cyan-300">Skills</h2>
           </div>
-          <div className="space-y-6">
-            {[sliderRef0, sliderRef1, sliderRef2].map((sliderRef, rowIdx) => (
-              <div key={rowIdx} ref={sliderRef} className="keen-slider">
-                {skillRows[rowIdx].map((skill, i) => (
-                  <div
-                    key={i}
-                    className="keen-slider__slide flex items-center gap-3 bg-gray-800/50 px-6 py-4 rounded-lg min-w-[180px] hover:bg-cyan-900/20 transition-all group"
-                  >
-                    <skill.icon className="text-cyan-400 text-2xl transition-transform group-hover:scale-110" />
-                    <span className="text-gray-300 group-hover:text-cyan-300 transition-colors text-lg">
-                      {skill.name}
-                    </span>
-                  </div>
-                ))}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {skills[0].items.map((skill, i) => (
+              <div
+                key={i}
+                className="flex items-center gap-3 bg-gray-800/50 px-4 py-3 rounded-lg hover:bg-cyan-900/20 transition-all group"
+              >
+                <skill.icon className="text-cyan-400 text-2xl" />
+                <span className="text-gray-300 text-base">{skill.name}</span>
               </div>
             ))}
           </div>
         </motion.div>
       </section>
-
-      {/* <section id="skills" className="py-16 px-6 md:px-24 relative z-10">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={fadeInUp}
-        >
-          <div className="flex items-center gap-4 mb-8">
-            <div className="h-1 w-12 bg-cyan-400 rounded-full"></div>
-            <h2 className="text-3xl font-bold text-cyan-300">Skills</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {skills.map((group, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-gray-900/30 backdrop-blur-lg rounded-2xl p-6 border border-gray-800"
-              >
-                <h3 className="text-xl font-semibold text-cyan-300 mb-4">
-                  {group.category}
-                </h3>
-                <div className="grid grid-cols-2 gap-3">
-                  {group.items.map((skill, i) => (
-                    <motion.div
-                      key={i}
-                      whileHover={{ scale: 1.05 }}
-                      className="flex items-center gap-3 bg-gray-800/50 px-4 py-3 rounded-lg hover:bg-cyan-900/20 transition-all group"
-                    >
-                      <skill.icon className="text-cyan-400 text-xl transition-transform group-hover:scale-110" />
-                      <span className="text-gray-300 group-hover:text-cyan-300 transition-colors">
-                        {skill.name}
-                      </span>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-      </section> */}
       {/* Experience Section */}
       <section id="experience" className="py-16 px-6 md:px-24 relative z-10">
         <motion.div
