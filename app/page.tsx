@@ -1,5 +1,4 @@
 "use client";
-import { useKeenSlider } from "keen-slider/react";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -43,7 +42,6 @@ import profilePic from "@/public/IMG_20250528_112932.jpg";
 import kylientLogo from "@/public/logos/kylient.jpg";
 import variantLogo from "@/public/logos/variant.jpg";
 import infoceptsLogo from "@/public/logos/infocepts.jpg";
-import "keen-slider/keen-slider.min.css";
 
 const KylientLogo = () => (
   <div className="bg-white rounded-lg p-1 flex items-center justify-center w-12 h-12">
@@ -61,8 +59,6 @@ const InfoceptsLogo = () => (
   </div>
 );
 
-const ROWS = 3;
-
 export default function Portfolio() {
   const [activeSection, setActiveSection] = useState("home");
   const [hoveredExperience, setHoveredExperience] = useState<number | null>(
@@ -71,7 +67,6 @@ export default function Portfolio() {
 
   useEffect(() => {
     document.title = "Harshal Jadhav | DevOps Engineer";
-
     const handleScroll = () => {
       const sections = document.querySelectorAll("section");
       sections.forEach((section) => {
@@ -79,13 +74,11 @@ export default function Portfolio() {
         const offset = section.offsetTop - 100;
         const height = section.offsetHeight;
         const id = section.getAttribute("id");
-
         if (top >= offset && top < offset + height) {
           setActiveSection(id || "home");
         }
       });
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -288,71 +281,6 @@ export default function Portfolio() {
     { id: "certifications", label: "Certifications" },
     { id: "contact", label: "Contact" },
   ];
-  const [sliderRefs, setSliderRefs] = useState<any[]>([]);
-
-  useEffect(() => {
-    setSliderRefs((sliderRefs) =>
-      Array(skills.length)
-        .fill(null)
-        .map((_, i) => sliderRefs[i] || null)
-    );
-  }, [skills.length]);
-
-  const skillRows = Array.from({ length: ROWS }, (_, rowIdx) =>
-    skills[0].items.filter((_, i) => i % ROWS === rowIdx)
-  );
-  function AutoplayPlugin(slider: any) {
-    let timeout: any;
-    let mouseOver = false;
-
-    function clearNextTimeout() {
-      clearTimeout(timeout);
-    }
-
-    function nextTimeout() {
-      clearTimeout(timeout);
-      if (mouseOver) return;
-      timeout = setTimeout(() => {
-        slider.next();
-      }, 2000);
-    }
-
-    slider.on("created", () => {
-      slider.container.addEventListener("mouseover", () => {
-        mouseOver = true;
-        clearNextTimeout();
-      });
-      slider.container.addEventListener("mouseout", () => {
-        mouseOver = false;
-        nextTimeout();
-      });
-      nextTimeout();
-    });
-    slider.on("dragStarted", clearNextTimeout);
-    slider.on("animationEnded", nextTimeout);
-    slider.on("updated", nextTimeout);
-  }
-  const [sliderRef0] = useKeenSlider(
-    {
-      loop: true,
-      slides: { perView: 5, spacing: 16 },
-    },
-    [AutoplayPlugin]
-  );
-  const [sliderRef1] = useKeenSlider(
-    {
-      loop: true,
-      slides: { perView: 5, spacing: 16 },
-    },
-    [AutoplayPlugin]
-  );
-  const [sliderRef2] = useKeenSlider(
-    {
-      loop: true,
-      slides: { perView: 5, spacing: 16 },
-    },
-    [AutoplayPlugin]
-  );
 
   return (
     <div className="bg-gradient-to-br from-[#0a0f1f] via-[#121c33] to-[#0a0f1f] text-gray-100 min-h-screen scroll-smooth">
@@ -602,7 +530,7 @@ export default function Portfolio() {
             <h2 className="text-3xl font-bold text-cyan-300">Projects</h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
             {projects.map((project, index) => (
               <motion.div
                 key={index}
@@ -632,11 +560,9 @@ export default function Portfolio() {
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          {/*
-                          <div className="p-2 bg-gray-800/50 rounded-lg hover:bg-cyan-900/20 transition">
+                          {/* <div className="p-2 bg-gray-800/50 rounded-lg hover:bg-cyan-900/20 transition">
                             <FaExternalLinkAlt className="text-gray-300 hover:text-cyan-300" />
-                          </div>
-                          */}
+                          </div> */}
                         </a>
                       )}
                     </div>
@@ -646,36 +572,32 @@ export default function Portfolio() {
 
                   <div className="mt-6">
                     <p className="text-sm text-cyan-400 mb-2">Tech Stack:</p>
-                    <div className="flex flex-wrap gap-3">
+                    <div className="flex flex-wrap justify-between gap-4">
                       {project.tech.map((tech, i) => (
-                        <div
+                        <span
                           key={i}
-                          className="flex items-center gap-2 bg-gray-800/50 px-3 py-2 rounded-md group-hover:bg-cyan-900/20 transition-all"
+                          className="w-10 h-10 bg-cyan-900/30 rounded-md flex items-center justify-center"
                         >
                           {typeof tech === "object" &&
                           tech !== null &&
                           "logo" in tech ? (
-                            <div className="w-8 h-8 flex items-center justify-center">
-                              <Image
-                                src={tech.logo}
-                                alt={`${project.title} tech logo`}
-                                width={32}
-                                height={32}
-                                className="w-full h-full object-contain"
-                              />
-                            </div>
+                            <Image
+                              src={tech.logo}
+                              alt={`${project.title} tech logo`}
+                              width={36}
+                              height={36}
+                              className="w-full h-full object-cover rounded"
+                            />
                           ) : typeof tech === "object" &&
                             tech !== null &&
                             "icon" in tech ? (
-                            <div className="text-cyan-400">
-                              <tech.icon className="text-xl" />
-                            </div>
+                            <tech.icon className="text-cyan-400 text-2xl" />
                           ) : (
                             <span className="text-xs text-cyan-400">
                               {typeof tech === "string" ? tech : ""}
                             </span>
                           )}
-                        </div>
+                        </span>
                       ))}
                     </div>
                   </div>
@@ -751,12 +673,7 @@ export default function Portfolio() {
                   onMouseEnter={() => setHoveredExperience(index)}
                   onMouseLeave={() => setHoveredExperience(null)}
                 >
-                  <div className="absolute -left-14 top-0 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-full w-10 h-10 flex items-center justify-center shadow-lg shadow-cyan-500/30">
-                    {/* <div className="text-white text-lg font-bold">
-                      {index + 1}
-                    </div> */}
-                  </div>
-
+                  <div className="absolute -left-14 top-0 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-full w-10 h-10 flex items-center justify-center shadow-lg shadow-cyan-500/30"></div>
                   <motion.div
                     className={`bg-gray-900/30 backdrop-blur-lg rounded-2xl p-6 border border-gray-800 shadow-lg transition-all overflow-hidden ${
                       hoveredExperience === index ? "border-cyan-500/50" : ""
