@@ -143,19 +143,16 @@ export default function Portfolio() {
         "S B Jain Institute of Technology Management and Research, Nagpur",
       degree: "B.Tech in Computer Science and Engineering",
       year: "2020 – 2024",
-      score: "CGPA: 7.5/10",
     },
     {
       institution: "Hadas Junior College, Nagpur",
       degree: "Higher Secondary Certificate",
       year: "2019 – 2020",
-      score: "60%",
     },
     {
       institution: "Sheeladevi Public School, Nagpur",
       degree: "Secondary School Certificate",
       year: "2017 – 2018",
-      score: "82%",
     },
   ];
 
@@ -257,7 +254,7 @@ export default function Portfolio() {
     {
       title: "AWS Solutions Architect – Associate",
       issuer: "ExcelR",
-      link: "https://portfolio-bucket-0010.s3.ap-south-1.amazonaws.com/Portfolio/AWS-Harshal+Santosh+Jadhav.pdf",
+      link: "https://portfolio-harshal.s3.ap-south-1.amazonaws.com/AWS-Harshal+Santosh+Jadhav.pdf",
     },
     {
       title: "Spring Boot 3, Spring 6 & Hibernate",
@@ -372,7 +369,7 @@ export default function Portfolio() {
                 <FaGithub className="text-xl" />
               </a>
               <a
-                href="https://linkedin.com/in/harshaljadhav"
+                href="https://www.linkedin.com/in/harshal-jadhav-75b8371b0/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 text-gray-400 hover:text-cyan-400 transition-colors"
@@ -408,9 +405,8 @@ export default function Portfolio() {
           </motion.div>
 
           <motion.p className="text-xl md:text-1xl text-gray-300 font-light max-w-xl">
-            B.Tech in Computer Science | Experienced in CI/CD, Jenkins, Docker,
-            Kubernetes, and AWS. Skilled in building scalable, secure, and
-            efficient solutions.
+            DevOps & Cloud Engineer | CI/CD • Kubernetes • AWS • Docker •
+            Jenkins | Tech Aficionado
           </motion.p>
 
           <div className="mt-6 flex flex-wrap gap-4">
@@ -433,7 +429,7 @@ export default function Portfolio() {
           <Image
             src={profilePic}
             alt="Harshal Jadhav"
-            className="relative z-10 rounded-full w-64 h-64 md:w-80 md:h-80 object-cover border-4 border-transparent bg-gradient-to-br from-cyan-500 to-blue-500 p-1 shadow-2xl"
+            className="relative z-12 rounded-full w-64 h-64 md:w-80 md:h-80 object-cover border-4 border-transparent bg-gradient-to-br from-cyan-500 to-blue-500 p-1 shadow-2xl "
           />
         </motion.div>
       </section>
@@ -454,17 +450,19 @@ export default function Portfolio() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div>
               <p className="text-lg text-gray-300 leading-relaxed mb-4">
-                I'm a B.Tech graduate in Computer Science and Engineering with
-                expertise in DevOps, cloud computing, and infrastructure
-                automation. My journey began at Infocepts where I developed
-                backend APIs using Spring Boot and integrated databases with MS
-                SQL Server.
+                I’m a Computer Science Engineer with a strong focus on DevOps,
+                Cloud Infrastructure, and Automation. From backend engineering
+                to designing production-ready CI/CD pipelines, I thrive at the
+                intersection of code, cloud, and containers.
               </p>
               <p className="text-lg text-gray-300 leading-relaxed mb-4">
-                At Variant.ai, I designed scalable VPC architectures and
-                implemented AWS automation solutions. Currently at Kylient
-                Technologies, I build production-grade CI/CD pipelines using
-                Jenkins, Docker, and Kubernetes.
+                I kickstarted my journey at Infocepts, building robust backend
+                with Java and integration with SQL Server. At Variant.ai, I
+                shifted gears to architect and automate scalable, secure VPC
+                environments on AWS. Today, at Kylient Technologies, I craft the
+                design of battle-tested CI/CD pipelines using Jenkins, Docker,
+                and Kubernetes—bringing infrastructure to life with precision
+                and resilience.
               </p>
             </div>
             <div className="bg-gray-800/50 rounded-xl p-6 border border-gray-700">
@@ -477,7 +475,7 @@ export default function Portfolio() {
                     <div className="w-2 h-2 rounded-full bg-cyan-400"></div>
                   </div>
                   <span className="text-gray-300">
-                    Streamlined cloud infrastructure management
+                    Infrastructure as Code: Everything versioned
                   </span>
                 </li>
                 <li className="flex items-start">
@@ -485,7 +483,7 @@ export default function Portfolio() {
                     <div className="w-2 h-2 rounded-full bg-cyan-400"></div>
                   </div>
                   <span className="text-gray-300">
-                    Automated CI/CD pipelines for efficiency
+                    Automated CI/CD: Build, test, and deploy
                   </span>
                 </li>
                 <li className="flex items-start">
@@ -493,7 +491,7 @@ export default function Portfolio() {
                     <div className="w-2 h-2 rounded-full bg-cyan-400"></div>
                   </div>
                   <span className="text-gray-300">
-                    Containerization for scalability
+                    Container First: Dockerize everything & orchestrate
                   </span>
                 </li>
                 <li className="flex items-start">
@@ -501,7 +499,7 @@ export default function Portfolio() {
                     <div className="w-2 h-2 rounded-full bg-cyan-400"></div>
                   </div>
                   <span className="text-gray-300">
-                    Proactive monitoring for system health
+                    Cloud-Native Thinking: Scalable & resilient design
                   </span>
                 </li>
                 <li className="flex items-start">
@@ -509,7 +507,15 @@ export default function Portfolio() {
                     <div className="w-2 h-2 rounded-full bg-cyan-400"></div>
                   </div>
                   <span className="text-gray-300">
-                    Cost optimization through resource management
+                    Proactive Monitoring: Visibility at every layer
+                  </span>
+                </li>
+                <li className="flex items-start">
+                  <div className="mt-1 mr-3 text-cyan-400">
+                    <div className="w-2 h-2 rounded-full bg-cyan-400"></div>
+                  </div>
+                  <span className="text-gray-300">
+                    Cost Optimization: Performance meets budget
                   </span>
                 </li>
               </ul>
@@ -767,7 +773,6 @@ export default function Portfolio() {
                 </h3>
                 <p className="text-gray-300">{edu.degree}</p>
                 <p className="text-gray-400 text-sm">{edu.year}</p>
-                <p className="text-cyan-400 font-medium mt-2">{edu.score}</p>
               </motion.div>
             ))}
           </div>
